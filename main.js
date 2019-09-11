@@ -1,15 +1,42 @@
 let timerDisplay = document.querySelector("#timer")
 let result = document.querySelector("#result")
+let totalTime;
 let scramble = document.querySelector("#scramble")
+
+$(document).ready(function (){
+    $('#plusTwo').on('click', function(){
+        totalTimePlusTwo()
+    })
+})
+
+$(document).ready(function (){
+    $('#newScramble').on('click', function(){
+        scramble.innerHTML = scrambleGenerator()
+    })
+})
+
+$(document).ready(function (){
+    $('#dnf').on('click', function(){
+        timerDisplay.innerHTML = "DNF"
+    })
+})
 
 const scrambleGenerator = () => {
     let moveList = ["R","L","U","D","F","B"]
     let moveModifierList = ["\'","2",""]
     let scrambleLength = 25
     let generatedScramble = ""
+    let lastUsedMove = ""
 
     for(i = 0; i <= scrambleLength; i++){
+        if(i != 0){
+            moveList.splice(moveList.indexOf(lastUsedMove),1)
+        }
         generatedScramble += moveList[Math.floor(Math.random() * moveList.length)]
+        if(i != 0){
+        moveList.push(lastUsedMove)
+        }
+        lastUsedMove = generatedScramble.charAt(generatedScramble.length - 1)
         generatedScramble += moveModifierList[Math.floor(Math.random() * moveModifierList.length)]
         generatedScramble += " "
     }
@@ -65,16 +92,17 @@ if(timerRunning){
 }
 
 const timeFormatter = (time) => {
-let h = m = s = ms = 0
-let newTime = '';
-h = Math.floor(time / (60 * 60 * 1000))
-time = time % (60 * 60 * 1000)
-m = Math.floor(time / (60 * 1000))
-time = time % (60 * 1000)
-s = Math.floor(time / 1000)
-ms = time % 1000
-newTime = h + ":" + m + ":" + s + "." +  ms
-return newTime;
+    totalTime = time
+    let h = m = s = ms = 0
+    let newTime = '';
+    h = Math.floor(time / (60 * 60 * 1000))
+    time = time % (60 * 60 * 1000)
+    m = Math.floor(time / (60 * 1000))
+    time = time % (60 * 1000)
+    s = Math.floor(time / 1000)
+    ms = time % 1000
+    newTime = h + ":" + m + ":" + s + "." +  ms
+    return newTime;
 }
 
 //changing timer text the color on press
@@ -84,4 +112,8 @@ document.body.onkeydown = function (e) {
     }
 }
 
+const totalTimePlusTwo = () => {
+    totalTime += 2000
+    timerDisplay.innerHTML = timeFormatter(totalTime)
+}
 
