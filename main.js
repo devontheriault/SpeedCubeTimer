@@ -1,7 +1,14 @@
 let timerDisplay = document.querySelector("#timer")
 let result = document.querySelector("#result")
-let totalTime;
+let totalTime = 0;
 let scramble = document.querySelector("#scramble")
+let moveList3x3 = ["R","L","U","D","F","B"]
+let moveModifierList3x3 = ["\'","2",""]
+let solves = []
+
+const createNewScramble = () => {
+    scramble.innerHTML = scrambleGenerator(moveList3x3, moveModifierList3x3)
+}
 
 $(document).ready(function (){
     $('#plusTwo').on('click', function(){
@@ -11,7 +18,7 @@ $(document).ready(function (){
 
 $(document).ready(function (){
     $('#newScramble').on('click', function(){
-        scramble.innerHTML = scrambleGenerator()
+        createNewScramble()
     })
 })
 
@@ -21,9 +28,7 @@ $(document).ready(function (){
     })
 })
 
-const scrambleGenerator = () => {
-    let moveList = ["R","L","U","D","F","B"]
-    let moveModifierList = ["\'","2",""]
+const scrambleGenerator = (moveList, moveModifierList) => {
     let scrambleLength = 25
     let generatedScramble = ""
     let lastUsedMove = ""
@@ -45,7 +50,7 @@ const scrambleGenerator = () => {
 }
 
 //setting the initial scramble
-scramble.innerHTML = scrambleGenerator()
+createNewScramble(moveList3x3, moveModifierList3x3)
 //setting the initial timerRunning bool
 let timerRunning = false
 //setting the initialStartTime
@@ -80,15 +85,16 @@ const stopTimer = () => {
     let finishTime = date.getTime() - startTime
     timerDisplay.innerHTML = timeFormatter(finishTime)
     timerRunning = false
-    scramble.innerHTML = scrambleGenerator()
+    saveTimes(timerDisplay.innerHTML)
+    scramble.innerHTML = scrambleGenerator(moveList3x3,moveModifierList3x3) 
 }
 
 const updateTime = () => {
-if(timerRunning){
-    let date = new Date()
-    let currentTime = date.getTime() - startTime
-    timerDisplay.innerHTML = timeFormatter(currentTime) 
-}
+    if(timerRunning){
+        let date = new Date()
+        let currentTime = date.getTime() - startTime
+        timerDisplay.innerHTML = timeFormatter(currentTime) 
+    }
 }
 
 const timeFormatter = (time) => {
@@ -112,8 +118,17 @@ document.body.onkeydown = function (e) {
     }
 }
 
-const totalTimePlusTwo = () => {
+const totalTimePlusTwo = () => {let solveList = document.querySelector("#solveList")
     totalTime += 2000
     timerDisplay.innerHTML = timeFormatter(totalTime)
 }
 
+const saveTimes = (time) => {
+    solves.push(time)
+    updateSolveList(time)
+}
+
+const updateSolveList = (time) => {
+    let solveList = document.querySelector("#solveList")
+    solveList.innerHTML += time + "\n"
+}
