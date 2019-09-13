@@ -25,6 +25,8 @@ $(document).ready(function (){
 $(document).ready(function (){
     $('#dnf').on('click', function(){
         timerDisplay.innerHTML = "DNF"
+        solves.push("DNF")
+        updateSolveList(solves)
     })
 })
 
@@ -118,17 +120,40 @@ document.body.onkeydown = function (e) {
     }
 }
 
-const totalTimePlusTwo = () => {let solveList = document.querySelector("#solveList")
-    totalTime += 2000
-    timerDisplay.innerHTML = timeFormatter(totalTime)
+const totalTimePlusTwo = () => {
+    let solveList = document.querySelector("#solveList")
+    if(checkDNF()){  
+        totalTime += 2000
+        timerDisplay.innerHTML = timeFormatter(totalTime)
+        solves[solves.length - 1] = timeFormatter(totalTime)
+        updateSolveList(solves)
+    }
 }
 
 const saveTimes = (time) => {
     solves.push(time)
-    updateSolveList(time)
+    updateSolveList(solves)
 }
 
-const updateSolveList = (time) => {
-    let solveList = document.querySelector("#solveList")
-    solveList.innerHTML += time + "\n"
+const updateSolveList = (times) => {
+    let ul = document.querySelector("#solveList")
+    
+    ul.innerHTML = " "
+    for(i=0; i<times.length;i++){  
+        addItemtoSolvesList(ul,times)
+    }
+}
+
+const addItemtoSolvesList = (ul,times) => {
+    let li = document.createElement('li')
+    li.innerHTML = times[i]
+    ul.appendChild(li)
+}
+
+const checkDNF = () => {
+    if(solves[solves.length - 1] === "DNF"){
+        return false
+    }else{
+        return true
+    }
 }

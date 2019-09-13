@@ -1,0 +1,29 @@
+.header {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+.container {
+    display:flex;
+    flex-wrap: wrap;
+    align-items: center;
+    flex-direction: column;
+}
+
+.stats {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: space-around
+}
+
+ul {
+    list-style-type: none;
+}
+#timer {
+    font-size: 500%;
+}
+
+#title {
+    font-size: 300%
+}
